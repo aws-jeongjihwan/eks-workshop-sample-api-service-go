@@ -8,7 +8,21 @@ import (
 	"os"
 	"sort"
 	"strings"
+	
+	_ "github.com/aws/aws-xray-sdk-go/plugins/ec2"
+	_ "github.com/aws/aws-xray-sdk-go/plugins/ecs"
+	"github.com/aws/aws-xray-sdk-go/xray"
+	
 )
+
+const appName = "x-ray-pgm"
+
+func init() {
+	xray.Configure(xray.Config{
+		DaemonAddr:     "xray-service.default:2000",
+		LogLevel:       "info",
+	})
+}
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
